@@ -9,23 +9,23 @@
   white  : true
 */
 /*global */
+var connectHello, server,
+    http     = require( 'http'    ),
+    connect  = require( 'connect' ),
+    bodyText = 'Hello Connect',
+    logger = require('morgan'),
+    app = connect().use(logger());
 
-var connectHello , server,
-    http    = require('http'),
-    connect = require('connect'),
-    app     = connect(),
-    bodyText = 'Hello connect';
-
-connectHello = function (request , response , next) {
-    response.setHeader('content-length' , bodyText.length);
-    response.end(bodyText);
+connectHello = function ( request, response, next ) {
+    response.setHeader( 'content-length', bodyText.length );
+    response.end( bodyText );
 };
 
-app.use( connectHello );
-server = http.createServer(app);
+app.use(connectHello);
+
+server = http.createServer( app );
 
 server.listen( 3000 );
 
-console.log('Listing on port %d', server.address().port);
-
+console.log( 'Listening on port %d', server.address().port );
 
