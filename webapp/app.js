@@ -11,7 +11,7 @@
 /*global */
 
 // ------------ BEGIN MODULE SCOPE VARIABLES --------------
-'use strict'
+'use strict';
 
 var http    = require('http'    ),
     express = require('express' ),
@@ -53,6 +53,6 @@ routes.configRoutes(app ,server);
 server.listen(3000);
 console.log(
     'Express server listening on port %d in %s mode',
-    server.address().port , app.settings.env
+    server.address().port, app.settings.env
 );
 // console.log(process.env.NODE_ENV);
