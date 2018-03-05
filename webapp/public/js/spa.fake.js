@@ -21,23 +21,23 @@ spa.fake = (function () {
       return 'id_'+String(fakeIdSerial++);
     };
     peopleList = [
-            { name : 'Bacy', _id : 'id_01',
+            { name : '范冰冰', _id : 'id_01',
                 css_map : {top : 20, left : 20,
                     'background-color' : 'rgb(128,128,128)'
                 }
 
             },
-            { name : 'Mike', _id : 'id_02',
+            { name : '刘亦菲', _id : 'id_02',
                 css_map : { top: 60, left: 20,
                     'background-color' : 'rgb( 128, 255, 128)'
                 }
             },
-            { name : 'Pebbles', _id : 'id_03',
+            { name : '新垣结衣', _id : 'id_03',
                 css_map : { top: 100, left: 20,
                     'background-color' : 'rgb( 128, 192, 192)'
                 }
             },
-            { name : 'Wilma', _id : 'id_04',
+            { name : '卡里克劳斯', _id : 'id_04',
                 css_map : { top: 140, left: 20,
                     'background-color' : 'rgb( 192, 128, 128)'
                 }
@@ -77,7 +77,7 @@ spa.fake = (function () {
                         dest_id : user.id,
                         dest_name : user.name,
                         sender_id : data.dest_id,
-                        msg_text : 'Thankes for the note, ' + user.name
+                        msg_text : 'Got it, Love U too.' + user.name
                     }]);
                 },1000)
             }
@@ -116,7 +116,7 @@ spa.fake = (function () {
                       dest_id : user.id,
                       dest_name : user.name,
                       sender_id : 'id_04',
-                      msg_text : 'Hi there ' + user.name + '! Wilma here.'
+                      msg_text : 'Hi there ' + user.name + '! Karlie is here.'
                   }]);
               }
               else{

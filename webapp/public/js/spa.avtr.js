@@ -32,8 +32,8 @@ spa.avtr = (function () {
         onTapNav        ,onHeldstartNav,
         onHeldmoveNav   ,onHeldendNav,
         onSetchatee     ,onListchange,
-        onLogout        ,configModule,
-        initModule;
+        onLogout        ,
+        configModule,     initModule;
 
     getRandRgb = function () {
         var i,rgb_list = [];
@@ -42,7 +42,7 @@ spa.avtr = (function () {
         }
         return 'rgb(' + rgb_list.join(',') + ')';
     };
-
+//--------------------- BEGIN DOM METHODS --------------------
     setJqueryMap = function ( $container ) {
         jqueryMap = {$container : $container};
     };
@@ -98,76 +98,81 @@ spa.avtr = (function () {
             .css('background-color','');
     };
 
-    onHeldmoveNav = function ( event ) {
-        var drag_map = stateMap.drag_map;
-        if (!drag_map){
-            return false;
-        }
-        $drag_target
-            .removeClass('spa-x-is-drag')
-            .css('background-color',stateMap.drag_bg_color);
+    onHeldmoveNav = function ( event ){
+    var drag_map = stateMap.drag_map;
+    if ( ! drag_map ){ return false; }
 
-        stateMap.drag_bg_color = undefined;
-        stateMap.$drag_target  = null;
-        stateMap.drag_map      = null;
-        updateAvatar($drag_target);
-    };
+    drag_map.top  += event.px_delta_y;
+    drag_map.left += event.px_delta_x;
 
+    stateMap.$drag_target.css({
+      top : drag_map.top, left : drag_map.left
+    });
+  };
+
+  onHeldendNav = function ( event ) {
+    var $drag_target = stateMap.$drag_target;
+    if ( ! $drag_target ){ return false; }
+
+    $drag_target
+      .removeClass('spa-x-is-drag')
+      .css('background-color',stateMap.drag_bg_color);
+
+    stateMap.drag_bg_color= undefined;
+    stateMap.$drag_target = null;
+    stateMap.drag_map     = null;
+    updateAvatar( $drag_target );
+  };
     onSetchatee = function ( event , arg_map ) {
         var
             $nav        = $(this),
-            new_cahtee  = arg_map.new_chatee,
+            new_chatee  = arg_map.new_chatee,
             old_chatee  = arg_map.old_chatee;
 
         if(old_chatee){
             $nav
-                .find('.spa-avtr-box[date-id=' + old_chatee.cid + ']')
-                .removeClass('spa-xpis-chatee');
+                .find('.spa-avtr-box[data-id=' + old_chatee.cid + ']')
+                .removeClass('spa-x-is-chatee');
         }
 
-        if(new_cahtee){
+        if(new_chatee){
             $nav
-                .find('spa-avtr-box[data-id=' + new_cahtee.cid + ']')
+                .find('.spa-avtr-box[data-id=' + new_chatee.cid + ']')
                 .addClass('spa-x-is-chatee');
         }
     };
 
-    onListchange = function ( event ) {
+    onListchange = function ( event ){
         var
-            $nav        = $(this),
-            people_db   = configMap.people_model.get_db(),
-            user        = configMap.people_model.get_user(),
-            chatee      = configMap.chat_model.get_chatee() || {},
+            $nav      = $(this),
+            people_db = configMap.people_model.get_db(),
+            user      = configMap.people_model.get_user(),
+            chatee    = configMap.chat_model.get_chatee() || {},
             $box;
 
         $nav.empty();
+        // if the user is logged out, do not render
+        if ( user.get_is_anon() ){ return false;}
 
-        if ( user.get_is_anon() ){
-            return false;
-        }
-
-        people_db().each(function (person, idx) {
+        people_db().each( function ( person, idx ){
             var class_list;
-            if( person.get_is_anon()){
-                return true;
-            }
-            class_list = ['spa-avtr-box'];
+            if ( person.get_is_anon() ){ return true; }
+            class_list = [ 'spa-avtr-box' ];
 
-            if(person.id === chatee.id){
-                class_list.push('spa-x-is-chatee');
+            if ( person.id === chatee.id ){
+                class_list.push( 'spa-x-is-chatee' );
             }
-
-            if(person.get_is_user()){
-                class_list.push('spa-x-is-user');
+            if ( person.get_is_user() ){
+                class_list.push( 'spa-x-is-user');
             }
 
             $box = $('<div/>')
-                .addClass(class_list.join(''))
-                .css(person.css_map)
-                .attr('data-id',String(person.id))
-                .prop('title',spa.util_b.encodeHtml(person.name))
-                .text(person.name)
-                .appendTo($nav);
+                .addClass( class_list.join(' '))
+                .css( person.css_map )
+                .attr( 'data-id', String( person.id ) )
+                .prop( 'title', spa.util_b.encodeHtml( person.name ))
+                .text( person.name )
+                .appendTo( $nav );
         });
     };
 

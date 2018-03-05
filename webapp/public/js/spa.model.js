@@ -13,7 +13,8 @@
 
 spa.model = (function(){
     'use strict';
-    var configMap = {
+    var
+        configMap = {
             anon_id : 'a0'
         },
         stateMap = {
@@ -21,7 +22,6 @@ spa.model = (function(){
             cid_serial : 0,
             is_connected : false,
             people_cid_map : {},
-            //用TAFFY创建一个数据库
             people_db : TAFFY(),
             user : null
         },
@@ -129,9 +129,7 @@ spa.model = (function(){
     };
 
     removePerson = function (person){
-      if (!person){
-          return false;
-      }
+      if (!person){return false;}
 
       if(person.id === configMap.anon_id){
           return false;
@@ -153,12 +151,8 @@ spa.model = (function(){
         get_by_cid = function (cid){
           return stateMap.people_cid_map[cid];
         };
-        get_db = function(){
-            return stateMap.people_db;
-        };
-        get_user = function(){
-            return stateMap.user;
-        };
+        get_db = function(){return stateMap.people_db;};
+        get_user = function(){return stateMap.user;};
 
 
         login = function (name){
@@ -181,15 +175,13 @@ spa.model = (function(){
         };
 
         logout = function(){
-            var is_removed,user = stateMap.user;
+            var user = stateMap.user;
 
             chat._leave();
-            is_removed = removePerson(user);
             stateMap.user = stateMap.anon_user;
             clearPeopleDb();
 
             $.gevent.publish('spa-logout',[user]);
-            return is_removed;
         };
 
         return{
@@ -271,7 +263,7 @@ spa.model = (function(){
             if(!person_map.name){
                 continue PERSON;
             }
-            if(stateMap.user && stateMap.user.id === person_map.id){
+            if(stateMap.user && stateMap.user.id === person_map._id){
                 stateMap.user.css_map = person_map.css_map;
                 continue PERSON;
             }
@@ -307,9 +299,8 @@ spa.model = (function(){
             set_chatee(msg_map.sender_id);
         }
         else if(msg_map.sender_id !== stateMap.user.id
-                && msg_map.sender_id !== chatee.id){
-            set_chatee(msg_map.sender_id);
-        }
+                && msg_map.sender_id !== chatee.id
+        ) {set_chatee(msg_map.sender_id);}
 
         $.gevent.publish('spa-updatechat',[msg_map]);
       };
@@ -334,7 +325,7 @@ spa.model = (function(){
               return false;
           }
           if(stateMap.user.get_is_anon()){
-              console.warn('User must be define before joining chat');
+              console.warn('User must be defined before joining chat');
               return false;
           }
 
@@ -387,8 +378,8 @@ spa.model = (function(){
               new_chatee = null;
           }
 
-          $.gevent.publish('spa-setchatee',{
-              old_chatee : chatee,
+          $.gevent.publish('spa-setchatee',
+              {old_chatee : chatee,
               new_chatee : new_chatee
           });
           chatee = new_chatee;
@@ -404,12 +395,12 @@ spa.model = (function(){
       };
       return{
           _leave : _leave_chat,
-          join : join_chat,
           get_chatee : get_chatee,
+          join : join_chat,
           send_msg : send_msg,
           set_chatee : set_chatee,
           update_avatar : update_avatar
-      }
+      };
     }());
 
     initModule = function(){
@@ -426,7 +417,7 @@ spa.model = (function(){
         initModule  : initModule,
         chat        : chat,
         people      : people
-    }
+    };
 }());
 
 

@@ -6,6 +6,7 @@
     "morgan": "1.9.0",
     "body-parser": "1.18.2",
     "method-override": "2.3.10",
-    "express-error-handler": "1.1.0"
+    "express-error-handler": "1.1.0",
+    "basic-auth-connect": "1.0.0"
   }
 }

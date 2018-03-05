@@ -13,20 +13,24 @@
 // ------------ BEGIN MODULE SCOPE VARIABLES --------------
 'use strict'
 
-var http    = require('http'),
-    express = require('express'),
-    app     = express(),
-    server  = http.createServer(app),
-    env     = process.env,
+var http    = require('http'    ),
+    express = require('express' ),
+    routes  = require('./routes'),
     bodyParser = require('body-parser'),
     methodOverride = require('method-override'),
     errorHandler = require("express-error-handler"),
-    logger  = require('morgan');
+    logger  = require('morgan'),
+    basicAuth = require('basic-auth-connect'),
+    app     = express(),
+    server  = http.createServer(app),
+    env     = process.env;
 //------------- END MODULE SCOPE VARIABLES ----------------
 
 //============= BEGIN SERVER CONFIG =======================
 app.use(bodyParser());
 app.use(methodOverride());
+app.use(basicAuth('user','spa'));
+app.use(express.static(__dirname + '/public'));
 
 if(process.env.NODE_ENV === 'development'){
     app.use(logger());
@@ -42,9 +46,7 @@ if(process.env.NODE_ENV === 'production'){
     // console.log("setted prd");
 }
 
-app.get('/',function (request , response) {
-    response.send('Hello Express !');
-});
+routes.configRoutes(app ,server);
 //============= END SERVER CONFIG =========================
 
 //------------- BEGIN START SERVER ------------------------
