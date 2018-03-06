@@ -22,7 +22,7 @@
 /*global jQuery */
 
 (function ($) {
-  $.uriAnchor = ( function () {
+  $.uriAnchor = ( function ( ) {
     //---------------- BEGIN MODULE SCOPE VARIABLES --------------
     var
       configMap = {
@@ -95,7 +95,7 @@
     };
     // End internal utility /parseStringToMap/
 
-   // Begin utility /makeAnchorString/
+    // Begin utility /makeAnchorString/
     // -- all the heavy lifting for setAnchor ( see below )
     // Converts a map into the anchor component as described
     // in setAnchor

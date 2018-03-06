@@ -1,5 +1,5 @@
 /*
- * app.js - Simple express server
+ * app.js - Express server with basic auth
 */
 
 /*jslint         node    : true, continue : true,
@@ -12,47 +12,43 @@
 
 // ------------ BEGIN MODULE SCOPE VARIABLES --------------
 'use strict';
+var
+  http    = require( 'http'     ),
+  express = require( 'express'  ),
+  routes  = require( './routes' ),
 
-var http    = require('http'    ),
-    express = require('express' ),
-    routes  = require('./routes'),
-    bodyParser = require('body-parser'),
-    methodOverride = require('method-override'),
-    errorHandler = require("express-error-handler"),
-    logger  = require('morgan'),
-    basicAuth = require('basic-auth-connect'),
-    app     = express(),
-    server  = http.createServer(app),
-    env     = process.env;
-//------------- END MODULE SCOPE VARIABLES ----------------
+  app     = express(),
+  server  = http.createServer( app );
+// ------------- END MODULE SCOPE VARIABLES ---------------
 
-//============= BEGIN SERVER CONFIG =======================
-app.use(bodyParser());
-app.use(methodOverride());
-app.use(basicAuth('user','spa'));
-app.use(express.static(__dirname + '/public'));
+// ------------- BEGIN SERVER CONFIGURATION ---------------
+app.configure( function () {
+  app.use( express.bodyParser() );
+  app.use( express.methodOverride() );
+  app.use( express.basicAuth( 'user', 'spa' ) );
+  app.use( express.static( __dirname + '/public' ) );
+  app.use( app.router );
+});
 
-if(process.env.NODE_ENV === 'development'){
-    app.use(logger());
-    app.use(errorHandler({
-        dumpExceptions : true,
-        showStack      : true
-    }));
-    // console.log("setted dev");
-}
+app.configure( 'development', function () {
+  app.use( express.logger() );
+  app.use( express.errorHandler({
+    dumpExceptions : true,
+    showStack      : true
+  }) );
+});
 
-if(process.env.NODE_ENV === 'production'){
-    app.use(errorHandler());
-    // console.log("setted prd");
-}
+app.configure( 'production', function () {
+  app.use( express.errorHandler() );
+});
 
-routes.configRoutes(app ,server);
-//============= END SERVER CONFIG =========================
+routes.configRoutes( app, server );
+// -------------- END SERVER CONFIGURATION ----------------
 
-//------------- BEGIN START SERVER ------------------------
-server.listen(3000);
+// ----------------- BEGIN START SERVER -------------------
+server.listen( 3000 );
 console.log(
-    'Express server listening on port %d in %s mode',
-    server.address().port, app.settings.env
+  'Express server listening on port %d in %s mode',
+   server.address().port, app.settings.env
 );
-// console.log(process.env.NODE_ENV);
+// ------------------ END START SERVER --------------------

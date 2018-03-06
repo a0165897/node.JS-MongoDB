@@ -11,12 +11,13 @@
 */
 /*global $, spa */
 
-var spa = (function(){
-    'use strict';
-    //启动model和shell模块
-    var initModule = function ($container){
-       spa.model.initModule();
-       spa.shell.initModule( $container );
-    };
-    return {initModule : initModule};
+var spa = (function () {
+  'use strict';
+  var initModule = function ( $container ) {
+    spa.data.initModule();
+    spa.model.initModule();
+    spa.shell.initModule( $container );
+  };
+
+  return { initModule: initModule };
 }());
